@@ -44,6 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    const submittedStatus = JSON.parse(localStorage.getItem('submitted')) || '';
+    if (submittedStatus === 'true') {
+        window.location.href = 'success.html';
+    }
 });
 
 function submitForm() {
