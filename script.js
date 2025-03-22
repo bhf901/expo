@@ -44,11 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    const formContainer = document.getElementById('hidden-form-container');
-    formContainer.innerHTML = '<form id="hidden-form" method="GET" action="https://script.google.com/a/macros/ecfs.org/s/AKfycbw3tYV33cPO1jTwmxUU5CwNoHoqep9ZzKaRKOBq6wTuUkf-fovBmP9atA26ySsXso7Nnw/exec"><input id="form-ethnicity" type="text" name="ethnicity"><input id="form-gender" type="text" name="gender"><input id="form-religion" type="text" name="religion"></form>';
-    for (let i = 0; i < 8; i++) {
-        document.getElementById('hidden-form').innerHTML += `<input id="form-guess-${i + 1}" type="text" name="person${i + 1}">`;
-    }
 });
 
 function submitForm() {
@@ -70,4 +65,29 @@ modError.clearMessage = () => {
 
 modError.addMessage = (msg) => {
     document.getElementById('error-msg').textContent = msg;
+}
+
+async function sendToSpreadsheet() {
+    const formData = new FormData(document.getElementById('hidden-form'));
+    try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxlBuCD1Qger6JOq8rboQWF5LPgyxoVbBcbo3oTizUxXUGSg58WkbclHwvot-Y5hVvphQ/exec', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            localStorage.setItem('submitted', JSON.stringify('true'));
+            window.location.href = 'success.html';
+        } else {
+            window.location.href = 'error.html';
+        }
+    } catch (err) {
+        console.error(err);
+        window.location.href = 'error.html';
+    }
+}
+
+function sendFromButton() {
+    document.getElementById('load-msg').textContent = 'Please wait. Do not navigate away from this page.';
+    sendToSpreadsheet().then(() => {document.getElementById('load-msg').textContent = '';});
 }

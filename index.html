@@ -220,10 +220,25 @@
         <div id="page-9">
             <h1>Thank you!</h1>
             <p>You've finished the experiment. All provided data is anonymous. Thank you for participating, and we hope you had fun doing the experiment.</p>
-            <button onclick="submitForm();">Submit</button>
+            <button onclick="submitForm();sendFromButton();">Submit</button>
+            <p id="load-msg"></p>
         </div>
         <p id="error-msg" style="color: red;"></p>
-        <div id="hidden-form-container" style="display: none;"></div>
+        <div id="hidden-form-container" style="display: none;">
+            <form id="hidden-form">
+                <input id="form-ethnicity" type="text" name="ethnicity">
+                <input id="form-gender" type="text" name="gender">
+                <input id="form-religion" type="text" name="religion">
+                <input id="form-guess-1" type="text" name="person1">
+                <input id="form-guess-2" type="text" name="person2">
+                <input id="form-guess-3" type="text" name="person3">
+                <input id="form-guess-4" type="text" name="person4">
+                <input id="form-guess-5" type="text" name="person5">
+                <input id="form-guess-6" type="text" name="person6">
+                <input id="form-guess-7" type="text" name="person7">
+                <input id="form-guess-8" type="text" name="person8">
+            </form>
+        </div>
         <script src="script.js"></script>
     </body>
 </html>
