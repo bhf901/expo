@@ -50,12 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (submittedStatus === 'true') {
         window.location.href = 'success.html';
     }
-    const turnstileElement = document.querySelector('.cf-turnstile');
-    if (turnstileElement) {
-        turnstileElement.addEventListener('turnstile:validated', (e) => {
-            turnstileToken = e.detail.token;
-        });
-    }
 });
 
 function submitForm() {
@@ -126,4 +120,8 @@ async function verifyTurnstile() {
     } catch (err) {
         console.error('Turnstile error. ', err);
     }
+}
+
+function loadToken(token) {
+    turnstileToken = token;
 }
