@@ -1,3 +1,5 @@
+let turnstileToken;
+
 function toPage(pageNum) {
     if (pageNum === undefined) {
         for (let i = 0; i <= 9; i++) {
@@ -48,6 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (submittedStatus === 'true') {
         window.location.href = 'success.html';
     }
+    const turnstileElement = document.querySelector('.cf-turnstile');
+    if (turnstileElement) {
+        turnstileElement.addEventListener('turnstile:validated', (e) => {
+            turnstileToken = e.detail.token;
+        });
+    }
 });
 
 function submitForm() {
@@ -72,26 +80,50 @@ modError.addMessage = (msg) => {
 }
 
 async function sendToSpreadsheet() {
-    const formData = new FormData(document.getElementById('hidden-form'));
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxlBuCD1Qger6JOq8rboQWF5LPgyxoVbBcbo3oTizUxXUGSg58WkbclHwvot-Y5hVvphQ/exec', {
-            method: 'POST',
-            body: formData
-        });
+    if (await verifyTurnstile()) {
+        const formData = new FormData(document.getElementById('hidden-form'));
+        try {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbxlBuCD1Qger6JOq8rboQWF5LPgyxoVbBcbo3oTizUxXUGSg58WkbclHwvot-Y5hVvphQ/exec', {
+                method: 'POST',
+                body: formData
+            });
 
-        if (response.ok) {
-            localStorage.setItem('submitted', JSON.stringify('true'));
-            window.location.href = 'success.html';
-        } else {
+            if (response.ok) {
+                localStorage.setItem('submitted', JSON.stringify('true'));
+                window.location.href = 'success.html';
+            } else {
+                window.location.href = 'error.html';
+            }
+        } catch (err) {
+            console.error(err);
             window.location.href = 'error.html';
         }
-    } catch (err) {
-        console.error(err);
-        window.location.href = 'error.html';
+    } else {
+        modError.addMessage('Invalid token.');
+        setTimeout(() => {
+            modError.clearMessage();
+        }, 2000);
     }
 }
 
 function sendFromButton() {
     document.getElementById('load-msg').textContent = 'Please wait. Do not navigate away from this page.';
     sendToSpreadsheet().then(() => {document.getElementById('load-msg').textContent = '';});
+}
+
+async function verifyTurnstile() {
+    if (!turnstileToken) {
+        modError.addMessage('Please complete the Cloudflare verification to continue.');
+    }
+    try {
+        await fetch('/turnstile-verification', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'cf-turnstile-response': turnstileToken})
+        }).then(response => response.json()).then(data => {
+            return !!data.success;
+        });
+    } catch (err) {
+        console.error('Turnstile error. ', err);
+    }
 }
