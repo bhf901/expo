@@ -118,7 +118,7 @@ async function verifyTurnstile() {
             return !!data.success;
         });
     } catch (err) {
-        console.error('Turnstile error. ', err);
+        console.error('Turnstile error. ', err, err.response ? err.response.data : err.message);
     }
 }
 
