@@ -116,7 +116,7 @@ async function verifyTurnstile() {
         modError.addMessage('Please complete the Cloudflare verification to continue.');
     }
     try {
-        await fetch('/turnstile-verification', {
+        await fetch('https://expo.benfink.nyc:8443/turnstile-verification', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({'cf-turnstile-response': turnstileToken})
