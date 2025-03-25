@@ -221,6 +221,11 @@
         <div id="page-9">
             <h1>Thank you!</h1>
             <p>You've finished the experiment. All provided data is anonymous. Thank you for participating, and we hope you had fun doing the experiment.</p>
+            <label for="user-email">Enter your email to confirm that you're a member of the Fieldston community. This data will not be used in the experiment.</label><br>
+            <div id="user-email">
+                <input id="user-email-input" type="text" placeholder="example">
+                <p>@ecfs.org</p>
+            </div>
             <div class="cf-turnstile" data-sitekey="0x4AAAAAABBwUgg2EfVj7bzt" data-callback="loadToken"></div>
             <button onclick="submitForm();sendFromButton();">Submit</button>
             <p id="load-msg"></p>

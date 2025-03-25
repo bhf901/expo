@@ -76,33 +76,30 @@ modError.addMessage = (msg) => {
 async function sendToSpreadsheet() {
     if (await verifyTurnstile()) {
         const formData = new FormData(document.getElementById('hidden-form'));
+        const userEmail = `${document.getElementById('user-email-input').value}@ecfs.org`;
         try {
-            const response = await fetch('https://script.google.com/macros/s/AKfycbxlBuCD1Qger6JOq8rboQWF5LPgyxoVbBcbo3oTizUxXUGSg58WkbclHwvot-Y5hVvphQ/exec', {
+            const response = await fetch('https://expo.benfink.nyc:8443/submit-response', {
                 method: 'POST',
-                body: formData
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 'response': formData, 'user-email': userEmail })
             });
 
-            if (response.ok) {
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('load-msg').textContent = '';
                 localStorage.setItem('submitted', JSON.stringify('true'));
                 window.location.href = 'success.html';
-            } else {
-                window.location.href = 'error.html';
             }
         } catch (err) {
-            console.error(err);
             window.location.href = 'error.html';
         }
-    } else {
-        modError.addMessage('Invalid token.');
-        setTimeout(() => {
-            modError.clearMessage();
-        }, 2000);
     }
 }
 
 function sendFromButton() {
     document.getElementById('load-msg').textContent = 'Please wait. Do not navigate away from this page.';
-    sendToSpreadsheet().then(() => {document.getElementById('load-msg').textContent = '';});
+    sendToSpreadsheet();
 }
 
 async function verifyTurnstile() {
