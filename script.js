@@ -71,17 +71,21 @@ modError.clearMessage = () => {
 
 modError.addMessage = (msg) => {
     document.getElementById('error-msg').textContent = msg;
+    setTimeout(() => {
+        modError.clearMessage();
+    }, 2000);
 }
 
 async function sendToSpreadsheet() {
     if (await verifyTurnstile()) {
         const formData = new FormData(document.getElementById('hidden-form'));
         const userEmail = `${document.getElementById('user-email-input').value}@ecfs.org`;
+        formData.append('user-email', userEmail);
         try {
             const response = await fetch('https://expo.benfink.nyc:8443/submit-response', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: { 'response': formData, 'user-email': JSON.stringify(userEmail) }
+                body: formData
             });
 
             const data = await response.json();
@@ -95,6 +99,8 @@ async function sendToSpreadsheet() {
             document.getElementById('load-msg').textContent = '';
             window.location.href = 'error.html';
         }
+    } else {
+        modError.addMessage('Invalid token.')
     }
 }
 
