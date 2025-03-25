@@ -108,17 +108,21 @@ function sendFromButton() {
 async function verifyTurnstile() {
     if (!turnstileToken) {
         modError.addMessage('Please complete the Cloudflare verification to continue.');
+        return false;
     }
+
     try {
-        await fetch('https://expo.benfink.nyc:8443/turnstile-verification', {
+        const response = await fetch('https://expo.benfink.nyc:8443/turnstile-verification', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({'cf-turnstile-response': turnstileToken})
-        }).then(response => response.json()).then(data => {
-            return !!data.success;
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 'cf-turnstile-response': turnstileToken })
         });
+
+        const data = await response.json();
+        return data.success;
     } catch (err) {
-        console.error('Turnstile error. ', err, err.response ? err.response.data : err.message);
+        console.error('Turnstile error.', err);
+        return false;
     }
 }
 
