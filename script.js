@@ -71,61 +71,54 @@ modError.clearMessage = () => {
 
 modError.addMessage = (msg) => {
     document.getElementById('error-msg').textContent = msg;
-    setTimeout(() => {
-        modError.clearMessage();
-    }, 2000);
 }
 
 async function sendToSpreadsheet() {
     if (await verifyTurnstile()) {
         const formData = new FormData(document.getElementById('hidden-form'));
-        const userEmail = `${document.getElementById('user-email-input').value}@ecfs.org`;
-        formData.append('user-email', userEmail);
         try {
-            const response = await fetch('https://expo.benfink.nyc:8443/submit-response', {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbxlBuCD1Qger6JOq8rboQWF5LPgyxoVbBcbo3oTizUxXUGSg58WkbclHwvot-Y5hVvphQ/exec', {
                 method: 'POST',
                 body: formData
             });
 
-            const data = await response.json();
-
-            if (data.success) {
-                document.getElementById('load-msg').textContent = '';
+            if (response.ok) {
                 localStorage.setItem('submitted', JSON.stringify('true'));
                 window.location.href = 'success.html';
+            } else {
+                window.location.href = 'error.html';
             }
         } catch (err) {
-            document.getElementById('load-msg').textContent = '';
+            console.error(err);
             window.location.href = 'error.html';
         }
     } else {
-        modError.addMessage('Invalid token.')
+        modError.addMessage('Invalid token.');
+        setTimeout(() => {
+            modError.clearMessage();
+        }, 2000);
     }
 }
 
 function sendFromButton() {
     document.getElementById('load-msg').textContent = 'Please wait. Do not navigate away from this page.';
-    sendToSpreadsheet();
+    sendToSpreadsheet().then(() => {document.getElementById('load-msg').textContent = '';});
 }
 
 async function verifyTurnstile() {
     if (!turnstileToken) {
         modError.addMessage('Please complete the Cloudflare verification to continue.');
-        return false;
     }
-
     try {
-        const response = await fetch('https://expo.benfink.nyc:8443/turnstile-verification', {
+        await fetch('https://expo.benfink.nyc:8443/turnstile-verification', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 'cf-turnstile-response': turnstileToken })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({'cf-turnstile-response': turnstileToken})
+        }).then(response => response.json()).then(data => {
+            return !!data.success;
         });
-
-        const data = await response.json();
-        return data.success;
     } catch (err) {
-        console.error('Turnstile error.', err);
-        return false;
+        console.error('Turnstile error. ', err, err.response ? err.response.data : err.message);
     }
 }
 
