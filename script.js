@@ -81,7 +81,7 @@ async function sendToSpreadsheet() {
             const response = await fetch('https://expo.benfink.nyc:8443/submit-response', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 'response': formData, 'user-email': userEmail })
+                body: { 'response': formData, 'user-email': JSON.stringify(userEmail) }
             });
 
             const data = await response.json();
@@ -92,6 +92,7 @@ async function sendToSpreadsheet() {
                 window.location.href = 'success.html';
             }
         } catch (err) {
+            document.getElementById('load-msg').textContent = '';
             window.location.href = 'error.html';
         }
     }
