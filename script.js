@@ -84,7 +84,6 @@ async function sendToSpreadsheet() {
         try {
             const response = await fetch('https://expo.benfink.nyc:8443/submit-response', {
                 method: 'POST',
-                headers: { 'Content-Type': 'multipart/form-data' },
                 body: formData
             });
 
