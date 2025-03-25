@@ -219,8 +219,12 @@
             <button>Continue</button>
         </div>
         <div id="page-9">
-            <h1>Thank you!</h1>
-            <p>You've finished the experiment. All provided data is anonymous. Thank you for participating, and we hope you had fun doing the experiment.</p>
+            <h1>One Last Thing</h1>
+            <p>Please provide your email and complete the verification prompt. No data collected on this page will be stored with identifiers.</p>
+            <div id="email-collection">
+                <input id="user-email" type="text">
+                <p>@ecfs.org</p>
+            </div>
             <div class="cf-turnstile" data-sitekey="0x4AAAAAABBwUgg2EfVj7bzt" data-callback="loadToken"></div>
             <button onclick="submitForm();sendFromButton();">Submit</button>
             <p id="load-msg"></p>

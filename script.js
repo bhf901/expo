@@ -76,21 +76,34 @@ modError.addMessage = (msg) => {
 async function sendToSpreadsheet() {
     if (await verifyTurnstile()) {
         const formData = new FormData(document.getElementById('hidden-form'));
+        const email = document.getElementById('user-email').value;
+        document.getElementById('load-msg').textContent = 'Please wait while we attempt to submit your response. Do not navigate away from this page.';
         try {
-            const response = await fetch('https://script.google.com/macros/s/AKfycbxlBuCD1Qger6JOq8rboQWF5LPgyxoVbBcbo3oTizUxXUGSg58WkbclHwvot-Y5hVvphQ/exec', {
-                method: 'POST',
-                body: formData
-            });
+            if (email && !email.includes('@')) {
+                const response = await fetch('https://expo.benfink.nyc:8443/submit-form', {
+                    method: 'POST',
+                    headers: { 'User-Email': `${email}@ecfs.org` },
+                    body: formData
+                });
 
-            if (response.ok) {
-                localStorage.setItem('submitted', JSON.stringify('true'));
-                window.location.href = 'success.html';
-            } else {
-                window.location.href = 'error.html';
+                if (response.ok) {
+                    document.getElementById('load-msg').textContent = '';
+                    localStorage.setItem('submitted', JSON.stringify('true'));
+                    window.location.href = 'success.html';
+                } else if (response.status === 409 || response.status === 400) {
+                    document.getElementById('load-msg').textContent = '';
+                    modError.addMessage('The email you provided cannot be used.')
+                    setTimeout(() => {
+                        modError.clearMessage()
+                    }, 2000);
+                } else if (response.status === 500) {
+                    document.getElementById('load-msg').textContent = '';
+                    window.location.href = 'error.html';
+                }
             }
         } catch (err) {
-            console.error(err);
-            window.location.href = 'error.html';
+            document.getElementById('load-msg').textContent = '';
+            console.error(err, err.message);
         }
     } else {
         modError.addMessage('Invalid token.');
