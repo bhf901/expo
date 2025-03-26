@@ -92,7 +92,8 @@ async function sendToSpreadsheet() {
                     window.location.href = 'success.html';
                 } else if (response.status === 409 || response.status === 400) {
                     document.getElementById('load-msg').textContent = '';
-                    modError.addMessage('The email you provided cannot be used.')
+                    modError.addMessage('The email you provided cannot be used.');
+                    turnstile.reset('#turnstile-container');
                     setTimeout(() => {
                         modError.clearMessage()
                     }, 2000);
@@ -103,6 +104,7 @@ async function sendToSpreadsheet() {
             }
     } else {
         modError.addMessage('Invalid token.');
+        turnstile.reset('#turnstile-container');
         setTimeout(() => {
             modError.clearMessage();
         }, 2000);
@@ -110,7 +112,7 @@ async function sendToSpreadsheet() {
 }
 
 function sendFromButton() {
-    document.getElementById('load-msg').textContent = 'Please wait. Do not navigate away from this page.';
+    document.getElementById('load-msg').textContent = 'We are verifying the validity of this submission with Cloudflare. Do not navigate away from this page.';
     sendToSpreadsheet().then(() => {document.getElementById('load-msg').textContent = '';});
 }
 
@@ -138,3 +140,12 @@ async function verifyTurnstile() {
 function loadToken(token) {
     turnstileToken = token;
 }
+
+window.onloadTurnstileCallback = function () {
+    turnstile.render("#turnstile-container", {
+        sitekey: "0x4AAAAAABBwUgg2EfVj7bzt",
+        callback: (token) => {
+            loadToken(token)
+        }
+    });
+};

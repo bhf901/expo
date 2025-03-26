@@ -7,7 +7,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback" defer></script>
         <title>Speaker's Age Experiment</title>
     </head>
     <body>
@@ -225,7 +225,7 @@
                 <input id="user-email" type="text">
                 <p>@ecfs.org</p>
             </div>
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAABBwUgg2EfVj7bzt" data-callback="loadToken"></div>
+            <div id="turnstile-container"></div>
             <button onclick="submitForm();sendFromButton();">Submit</button>
             <p id="load-msg"></p>
         </div>
