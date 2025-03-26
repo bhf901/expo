@@ -77,12 +77,13 @@ async function sendToSpreadsheet() {
     if (await verifyTurnstile()) {
         const formData = new FormData(document.getElementById('hidden-form'));
         const email = document.getElementById('user-email').value;
+        const parsedEmail = `${email}@ecfs.org`;
         document.getElementById('load-msg').textContent = 'Please wait while we attempt to submit your response. Do not navigate away from this page.';
         try {
             if (email && !email.includes('@')) {
                 const response = await fetch('https://expo.benfink.nyc:8443/submit-form', {
                     method: 'POST',
-                    headers: { 'User-Email': `${email}@ecfs.org` },
+                    headers: { 'User-Email': parsedEmail },
                     body: formData
                 });
 
