@@ -79,7 +79,6 @@ async function sendToSpreadsheet() {
         const email = document.getElementById('user-email').value;
         const parsedEmail = `${email}@ecfs.org`;
         document.getElementById('load-msg').textContent = 'Please wait while we attempt to submit your response. Do not navigate away from this page.';
-        try {
             if (email && !email.includes('@')) {
                 const response = await fetch('https://expo.benfink.nyc:8443/submit-form', {
                     method: 'POST',
@@ -102,10 +101,6 @@ async function sendToSpreadsheet() {
                     window.location.href = 'error.html';
                 }
             }
-        } catch (err) {
-            document.getElementById('load-msg').textContent = '';
-            console.error(err, err.message);
-        }
     } else {
         modError.addMessage('Invalid token.');
         setTimeout(() => {
