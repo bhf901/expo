@@ -19,6 +19,10 @@ function toPage(pageNum) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('content').style.display = 'block';
+    if (isDarkMode()) {
+        document.getElementById('stylesheet').href = 'dark-mode.css';
+    }
     toPage(undefined);
     const buttons = document.querySelectorAll('button');
     for (let i = 0; i < buttons.length - 1; i++) {
@@ -149,3 +153,7 @@ window.onloadTurnstileCallback = function () {
         }
     });
 };
+
+function isDarkMode() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
