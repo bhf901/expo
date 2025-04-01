@@ -78,44 +78,36 @@ modError.addMessage = (msg) => {
 }
 
 async function sendToSpreadsheet() {
-    if (!turnstileToken) {
-        modError.addMessage('Please complete the Cloudflare verification to continue.');
-        return false;
-    }
-    const formData = new FormData(document.getElementById('hidden-form'));
-    const email = document.getElementById('user-email').value;
-    const parsedEmail = `${email}@ecfs.org`;
-    document.getElementById('load-msg').textContent = 'Please wait while we attempt to submit your response. Do not navigate away from this page.';
-    if (email && !email.includes('@')) {
-        const response = await fetch('https://expo.benfink.nyc:8443/submit-form', {
-            method: 'POST',
-            headers: { 'User-Email': parsedEmail, 'CF-Turnstile-Response': turnstileToken },
-            body: formData
-        });
-        if (response.ok) {
-            document.getElementById('load-msg').textContent = '';
-            localStorage.setItem('submitted', JSON.stringify('true'));
-            window.location.href = 'success.html';
-        } else if (response.status === 409 || response.status === 400) {
-            document.getElementById('load-msg').textContent = '';
-            modError.addMessage('The email you provided cannot be used.');
-            turnstile.reset('#turnstile-container');
-            setTimeout(() => {
-                modError.clearMessage()
-            }, 2000);
-        } else if (response.status === 500) {
-            document.getElementById('load-msg').textContent = '';
-            window.location.href = 'error.html';
-        } else if (response.status === 401) {
-            document.getElementById('load-msg').textContent = '';
-            modError.addMessage('Invalid token.');
-            turnstile.reset('#turnstile-container');
-            setTimeout(() => {
-                modError.clearMessage()
-            }, 2000);
-        }
+    if (await verifyTurnstile()) {
+        const formData = new FormData(document.getElementById('hidden-form'));
+        const email = document.getElementById('user-email').value;
+        const parsedEmail = `${email}@ecfs.org`;
+        document.getElementById('load-msg').textContent = 'Please wait while we attempt to submit your response. Do not navigate away from this page.';
+            if (email && !email.includes('@')) {
+                const response = await fetch('https://expo.benfink.nyc:8443/submit-form', {
+                    method: 'POST',
+                    headers: { 'User-Email': parsedEmail },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    document.getElementById('load-msg').textContent = '';
+                    localStorage.setItem('submitted', JSON.stringify('true'));
+                    window.location.href = 'success.html';
+                } else if (response.status === 409 || response.status === 400) {
+                    document.getElementById('load-msg').textContent = '';
+                    modError.addMessage('The email you provided cannot be used.');
+                    turnstile.reset('#turnstile-container');
+                    setTimeout(() => {
+                        modError.clearMessage()
+                    }, 2000);
+                } else if (response.status === 500) {
+                    document.getElementById('load-msg').textContent = '';
+                    window.location.href = 'error.html';
+                }
+            }
     } else {
-        modError.addMessage('A properly formatted email is required to submit this form.');
+        modError.addMessage('Invalid token.');
         turnstile.reset('#turnstile-container');
         setTimeout(() => {
             modError.clearMessage();
@@ -129,6 +121,10 @@ function sendFromButton() {
 }
 
 async function verifyTurnstile() {
+    if (!turnstileToken) {
+        modError.addMessage('Please complete the Cloudflare verification to continue.');
+        return false;
+    }
 
     try {
         const response = await fetch('https://expo.benfink.nyc:8443/turnstile-verification', {
