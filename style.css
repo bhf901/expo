@@ -82,3 +82,8 @@ select:focus {
 #content {
     display: none;
 }
+
+.disabled {
+    opacity: 0.5;
+    cursor: wait;
+}

@@ -78,6 +78,7 @@ modError.addMessage = (msg) => {
 }
 
 async function sendToSpreadsheet() {
+    disableSubmit(true);
     if (await verifyTurnstile()) {
         const formData = new FormData(document.getElementById('hidden-form'));
         const email = document.getElementById('user-email').value;
@@ -89,10 +90,10 @@ async function sendToSpreadsheet() {
                     headers: { 'User-Email': parsedEmail },
                     body: formData
                 });
-
                 if (response.ok) {
                     document.getElementById('load-msg').textContent = '';
                     localStorage.setItem('submitted', JSON.stringify('true'));
+                    disableSubmit(false);
                     window.location.href = 'success.html';
                 } else if (response.status === 409 || response.status === 400) {
                     document.getElementById('load-msg').textContent = '';
@@ -101,8 +102,10 @@ async function sendToSpreadsheet() {
                     setTimeout(() => {
                         modError.clearMessage()
                     }, 2000);
+                    disableSubmit(false);
                 } else if (response.status === 500) {
                     document.getElementById('load-msg').textContent = '';
+                    disableSubmit(false);
                     window.location.href = 'error.html';
                 }
             }
@@ -112,6 +115,7 @@ async function sendToSpreadsheet() {
         setTimeout(() => {
             modError.clearMessage();
         }, 2000);
+        disableSubmit(false);
     }
 }
 
@@ -156,4 +160,15 @@ window.onloadTurnstileCallback = function () {
 
 function isDarkMode() {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function disableSubmit(condition) {
+    const button = document.getElementById('final-submit');
+    if (condition) {
+        button.disabled = true;
+        button.classList.add('disabled');
+    } else {
+        button.disabled = false;
+        button.classList.remove('disabled');
+    }
 }
