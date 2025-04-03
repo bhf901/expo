@@ -87,3 +87,38 @@ select:focus {
     opacity: 0.5;
     cursor: wait;
 }
+
+.disabled:hover {
+    background-color: white;
+    color: #003180;
+}
+
+#load-status {
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#loading-circle {
+    width: 25px;
+    height: 25px;
+    border: 5px solid black;
+    border-radius: 50%;
+    clip-path: inset(0 0 50% 0);
+    animation: rotateCircle 1s linear infinite;
+    margin: 0 15px;
+}
+
+@keyframes rotateCircle {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
