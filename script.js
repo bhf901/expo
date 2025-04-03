@@ -121,7 +121,7 @@ async function sendToSpreadsheet() {
 
 function sendFromButton() {
     document.getElementById('load-status').style.display = 'flex';
-    document.getElementById('load-msg').style.display = 'We are verifying the validity of this submission with Cloudflare. Do not navigate away from this page.';
+    document.getElementById('load-msg').textContent = 'We are verifying the validity of this submission with Cloudflare. Do not navigate away from this page.';
     sendToSpreadsheet().then(() => {document.getElementById('load-status').style.display = 'none';});
 }
 
