@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const submittedStatus = JSON.parse(localStorage.getItem('submitted')) || '';
     if (submittedStatus === 'true') {
-        window.location.href = 'success.html';
+        window.location.href = 'https://expo.benfink.nyc/success/';
     }
 });
 
@@ -94,7 +94,7 @@ async function sendToSpreadsheet() {
                     document.getElementById('load-msg').textContent = '';
                     localStorage.setItem('submitted', JSON.stringify('true'));
                     disableSubmit(false);
-                    window.location.href = 'success.html';
+                    window.location.href = 'https://expo.benfink.nyc/success/';
                 } else if (response.status === 409 || response.status === 400) {
                     document.getElementById('load-msg').textContent = '';
                     modError.addMessage('The email you provided cannot be used.');
@@ -106,7 +106,7 @@ async function sendToSpreadsheet() {
                 } else if (response.status === 500) {
                     document.getElementById('load-msg').textContent = '';
                     disableSubmit(false);
-                    window.location.href = 'error.html';
+                    window.location.href = 'https://expo.benfink.nyc/error/';
                 }
             }
     } else {
