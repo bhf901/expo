@@ -163,6 +163,7 @@ function disableSubmit(condition) {
 document.getElementById('subject-religion').addEventListener('change', () => {
     if (document.getElementById('subject-religion').value === 'other-religion') {
         document.getElementById('eth-container').style.display = 'block';
+        document.getElementById('subject-ethnicity').value = '';
     } else {
         document.getElementById('eth-container').style.display = 'none';
         document.getElementById('subject-ethnicity').value = 'n/a';
