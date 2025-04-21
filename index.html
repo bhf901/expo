@@ -31,26 +31,28 @@
                     <option value="other">Other</option>
                 </select>
                 <br>
-                <label for="subject-ethnicity">Ethnicity</label>
-                <br>
-                <select id="subject-ethnicity">
-                    <option value="" disabled selected>Choose one...</option>
-                    <option value="native-continental">American Indian or Alaska Native</option>
-                    <option value="asian">Asian</option>
-                    <option value="black">Black or African American</option>
-                    <option value="mena">Middle Eastern or North African</option>
-                    <option value="native-pacific">Native Hawaiian or Other Pacific Islander</option>
-                    <option value="white">White</option>
-                </select>
-                <br>
                 <label for="subject-religion">Religion</label>
                 <br>
                 <select id="subject-religion">
                     <option value="" disabled selected>Choose one...</option>
-                    <option value="jewish">Jewish</option>
-                    <option value="other-religion">Non-Jewish or Atheist</option>
+                    <option value="ashkenazi">Ashkenazi Jewish (by practice or ancestry)</option>
+                    <option value="other-religion">Non-Ashkenazi, non-Jewish or Atheist</option>
                 </select>
                 <br>
+                <div id="eth-container">
+                    <label for="subject-ethnicity">Ethnicity</label>
+                    <br>
+                    <select id="subject-ethnicity">
+                        <option value="" disabled selected>Choose one...</option>
+                        <option value="native-continental">American Indian or Alaska Native</option>
+                        <option value="asian">Asian</option>
+                        <option value="black">Black or African American</option>
+                        <option value="mena">Middle Eastern or North African</option>
+                        <option value="native-pacific">Native Hawaiian or Other Pacific Islander</option>
+                        <option value="white">White</option>
+                        <option value="n/a" hidden></option>
+                    </select>
+                </div>
                 <button>Continue</button>
             </div>
             <div id="page-1">

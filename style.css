@@ -122,3 +122,7 @@ select:focus {
         transform: rotate(360deg);
     }
 }
+
+#eth-container {
+    display: none;
+}

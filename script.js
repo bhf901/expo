@@ -62,17 +62,10 @@ function submitForm() {
     }
 }
 
-function modError() {
-    return undefined;
-}
-
-modError.clearMessage = () => {
-    document.getElementById('error-msg').textContent = '';
-}
-
-modError.addMessage = (msg) => {
-    document.getElementById('error-msg').textContent = msg;
-}
+const modError = {
+    clearMessage: () => {document.getElementById('error-msg').textContent = '';},
+    addMessage: (msg) => {document.getElementById('error-msg').textContent = msg;}
+};
 
 async function sendToSpreadsheet() {
     disableSubmit(true);
@@ -166,3 +159,12 @@ function disableSubmit(condition) {
         button.classList.remove('disabled');
     }
 }
+
+document.getElementById('subject-religion').addEventListener('change', () => {
+    if (document.getElementById('subject-religion').value === 'other-religion') {
+        document.getElementById('eth-container').style.display = 'block';
+    } else {
+        document.getElementById('eth-container').style.display = 'none';
+        document.getElementById('subject-ethnicity').value = 'n/a';
+    }
+});
