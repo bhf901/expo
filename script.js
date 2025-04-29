@@ -2,13 +2,13 @@ let turnstileToken;
 
 function toPage(pageNum) {
     if (pageNum === undefined) {
-        for (let i = 0; i <= 9; i++) {
+        for (let i = 0; i <= 11; i++) {
             document.getElementById(`page-${i}`).style.display = 'none';
         }
         document.getElementById('welcome-content').style.display = 'block';
     } else {
         document.getElementById('welcome-content').style.display = 'none';
-        for (let i = 0; i <= 9; i++) {
+        for (let i = 0; i <= 11; i++) {
             if (i === pageNum) {
                 document.getElementById(`page-${i}`).style.display = 'block';
             } else {
@@ -57,7 +57,7 @@ function submitForm() {
     document.getElementById('form-ethnicity').value = document.getElementById('subject-ethnicity').value;
     document.getElementById('form-gender').value = document.getElementById('subject-gender').value;
     document.getElementById('form-religion').value = document.getElementById('subject-religion').value;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
         document.getElementById(`form-guess-${i + 1}`).value = document.getElementById(`guess-${i + 1}`).value;
     }
 }
