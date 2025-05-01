@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(`input-${i}`).style.display = 'none';
     }
 
-    let buttonIteration = 1;
     document.querySelectorAll('.audio-button').forEach((button, index) => {
         button.addEventListener('click', () => {
             disablePlay(button, true);
@@ -62,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 disablePlay(button, false);
             }, ms)
         });
-        buttonIteration += 1;
     });
 
     const submittedStatus = JSON.parse(localStorage.getItem('submitted')) || '';
