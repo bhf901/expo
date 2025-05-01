@@ -42,11 +42,13 @@ button:focus, .audio-button:focus {
 select {
     padding: 10px;
     outline: 0.5px solid black;
+    background-color: white;
     border-radius: 0;
     margin: 10px;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
+    font-size: calc(40px / 3);
 }
 
 select:focus {

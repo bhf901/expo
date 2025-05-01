@@ -188,6 +188,16 @@ function disablePlay(button, condition) {
     }
 }
 
+function isSafari() {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+}
+
+if (isSafari()) {
+    document.querySelectorAll('select').forEach((item) => {
+        item.style.webkitAppearance = 'none';
+    });
+}
+
 document.getElementById('subject-religion').addEventListener('change', () => {
     if (document.getElementById('subject-religion').value === 'other-religion') {
         document.getElementById('eth-container').style.display = 'block';
