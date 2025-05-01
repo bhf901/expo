@@ -47,6 +47,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    for (let i = 1; i <= 10; i++) {
+        document.getElementById(`input-${i}`).style.display = 'none';
+    }
+
+    let buttonIteration = 1;
+    document.querySelectorAll('.audio-button').forEach((button, index) => {
+        button.addEventListener('click', () => {
+            disablePlay(button, true);
+            document.getElementById(`audio-${index + 1}`).play();
+            const ms = document.getElementById(`audio-${index + 1}`).duration * 1000;
+            setTimeout(() => {
+                document.getElementById(`input-${index + 1}`).style.display = 'block';
+                disablePlay(button, false);
+            }, ms)
+        });
+        buttonIteration += 1;
+    });
+
     const submittedStatus = JSON.parse(localStorage.getItem('submitted')) || '';
     if (submittedStatus === 'true') {
         window.location.href = 'https://expo.benfink.nyc/success/';
@@ -157,6 +175,18 @@ function disableSubmit(condition) {
     } else {
         button.disabled = false;
         button.classList.remove('disabled');
+    }
+}
+
+function disablePlay(button, condition) {
+    if (condition) {
+        button.disabled = true;
+        button.textContent = 'Playing...'
+        button.classList.add('play-disabled');
+    } else {
+        button.disabled = false;
+        button.textContent = 'Play';
+        button.classList.remove('play-disabled');
     }
 }
 
