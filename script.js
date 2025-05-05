@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const submittedStatus = JSON.parse(localStorage.getItem('submitted')) || '';
+    const submittedStatus = JSON.parse(localStorage.getItem('surveyed')) || '';
     if (submittedStatus === 'true') {
         window.location.href = 'https://expo.benfink.nyc/success/';
     }
@@ -98,7 +98,7 @@ async function sendToSpreadsheet() {
                 });
                 if (response.ok) {
                     document.getElementById('load-msg').textContent = '';
-                    localStorage.setItem('submitted', JSON.stringify('true'));
+                    localStorage.setItem('surveyed', JSON.stringify('true'));
                     disableSubmit(false);
                     window.location.href = 'https://expo.benfink.nyc/success/';
                 } else if (response.status === 409 || response.status === 400) {
